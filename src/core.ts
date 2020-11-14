@@ -1,6 +1,6 @@
-import { insert, select_by_from, select_by_to } from './sql'
+import { insert_seq, select_by_from } from './sql'
 
-export function nextSeq(n: number): {
+export function processSeq(n: number): {
   to: number,
   stop_time: number
 } {
@@ -10,23 +10,22 @@ export function nextSeq(n: number): {
       stop_time: 0,
     }
   }
-  let next = select_by_from(n)
-  if (next) {
-    return next
+  let seq = select_by_from(n)
+  if (seq) {
+    return seq
   }
-  let to = calcNext(n)
-  let stop_time: number
-  let prev = select_by_to(to)
-  if (prev) {
-    stop_time = prev.stop_time + 1
-  } else {
-    let next = nextSeq(to)
-    stop_time = next.stop_time + 1
+  let next = calcNext(n)
+  let nextSeq = processSeq(next)
+  seq = {
+    to: next,
+    stop_time: 1 + nextSeq.stop_time,
   }
-  if (n % 2 === 1) {
-    insert({ from: n, to, stop_time })
-  }
-  return { to, stop_time }
+  insert_seq({
+    from: n,
+    to: seq.to,
+    stop_time: seq.stop_time,
+  })
+  return seq
 }
 
 export function calcNext(n: number) {

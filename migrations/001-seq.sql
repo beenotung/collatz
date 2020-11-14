@@ -1,6 +1,7 @@
 -- Up
 create table if not exists seq (
-  "from" integer not null,
+  -- don't mark this column as primary key to avoid auto increment when forget to supply when insert
+  "from" integer not null unique,
   "to" integer not null,
   "stop_time" integer not null
 );

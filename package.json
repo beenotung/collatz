@@ -1,14 +1,15 @@
 {
-	"scripts": {
-		"start": "ts-node-dev src/main.ts"
-	},
-	"dependencies": {
-		"better-sqlite3": "^7.1.1",
-		"better-sqlite3-helper": "^3.1.1",
-		"better-sqlite3-schema": "^0.5.0",
-		"tslib": "^2.0.3"
-	},
-	"devDependencies": {
-		"@types/better-sqlite3": "^5.4.0"
-	}
+  "scripts": {
+    "start:node": "ts-node src/main.ts",
+    "start:web": "parcel src/web.html"
+  },
+  "dependencies": {
+    "better-sqlite3": "^7.1.1",
+    "better-sqlite3-helper": "^3.1.1",
+    "better-sqlite3-schema": "^0.5.0",
+    "tslib": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^5.4.0"
+  }
 }

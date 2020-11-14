@@ -1,17 +1,22 @@
-import { nextSeq } from './core'
-import fs from 'fs'
+import { processSeq } from './core'
+import { toExportMode, toSafeMode } from 'better-sqlite3-schema'
+import { db } from './db'
 
-let N = 10000000000
-let file = 'collatz.csv'
-fs.writeFileSync(file, 'n,step\n')
+let N = 664000
 
-for (let n = 1; n < N; n++) {
+// speed up database writes
+let cacheSize = 8 * 1024 ** 2
+toExportMode(db, cacheSize)
+
+for (let n = 1; n <= N; n++) {
   if (n % (N / 100) === 0) {
     process.stdout.write(`\r ${n}/${N}`)
   }
-  let next = nextSeq(n)
-  let step = next.stop_time
-  fs.appendFileSync(file, `${n},${step}\n`)
+  processSeq(n)
 }
-console.log('\n saved to', file)
+
+// flush pending updates to disk
+toSafeMode(db)
+
+console.log('\n done')
 
