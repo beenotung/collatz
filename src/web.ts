@@ -1,3 +1,5 @@
+console.log('source: https://github.com/beenotung/collatz')
+
 document.body.innerHTML = `
 <canvas>
   Canvas is not supported
