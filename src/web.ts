@@ -93,9 +93,9 @@ function calcStep(n: number): number {
 
 let lastTime = Date.now()
 
-let FPS = 3
+let FPS = 3 // frame per second
 let frameInterval = 1000 / FPS
-let TPF = 1
+let TPF = 1 // tick per frame
 
 function run() {
   let currentTime = Date.now()
