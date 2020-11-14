@@ -4,21 +4,34 @@ document.body.innerHTML = `
 body {
   margin: 0;
   overflow: hidden;
+  font-size: 1em;
 }
 canvas {
   width: 100%;
   height: 100vh;
-  background-color: aquamarine;
+  background-color: papayawhip;
 }
 </style>
 <canvas>
 `
+let paused = true
 let canvas = document.querySelector('canvas') as HTMLCanvasElement
 let context = canvas.getContext('2d')!
+let fontSizeRatio = 3 / 100
+let fontSize = parseInt(getComputedStyle(document.body).fontSize)
 
 let rect = canvas.getClientRects().item(0)!
 window.addEventListener('resize', resize)
 resize()
+window.addEventListener('click', () => {
+  if (paused) {
+    paused = false
+    lastTime = Date.now()
+    paint()
+  } else {
+    paused = true
+  }
+})
 
 requestAnimationFrame(paint)
 
@@ -26,14 +39,24 @@ function resize() {
   rect = canvas.getClientRects().item(0)!
   canvas.width = rect.width
   canvas.height = rect.height
+  if (rect.width > rect.height) {
+    // desktop
+    fontSize = parseInt(getComputedStyle(document.body).fontSize)
+  } else {
+    // mobile
+    fontSize = rect.width * fontSizeRatio
+  }
+  context.font = `${fontSize}px Georgia`
 }
 
 function paint() {
   run()
 
+  // clear the screen
   context.fillStyle = 'black'
   context.fillRect(0, 0, rect.width, rect.height)
-  context.fillStyle = 'cyan'
+
+  // scan the data set for normalization
   let maxX = nextN
   let maxY = 0
   for (let i = 0; i < nextN; i++) {
@@ -41,15 +64,25 @@ function paint() {
       maxY = seq[i]
     }
   }
-  let msg = `maxX = ${maxX}, maxY = ${maxY}, FPS = ${FPS}, TPF = ${TPF}`
-  context.fillText(msg, 0, 10)
+
+  // paint message
+  let padding = fontSize * 0.5
+  context.fillStyle = 'cyan'
+  context.fillText(`[Click to pause/resume]`, padding, fontSize + padding)
+  context.fillText(`maxX = ${maxX}, maxY = ${maxY}`, padding, (fontSize + padding) * 2)
+  context.fillText(`FPS = ${FPS}, TPF = ${TPF}`, padding, (fontSize + padding) * 3)
+
+  // paint the chart
   for (let i = 0; i < nextN; i++) {
     let x = i / maxX * rect.width
     let y = (1 - seq[i] / maxY) * rect.height
     context.fillRect(x, y, 1, 1)
   }
 
-  requestAnimationFrame(paint)
+  // loop animation
+  if (!paused) {
+    requestAnimationFrame(paint)
+  }
 }
 
 let seq: number[] = []
