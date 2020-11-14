@@ -1,18 +1,7 @@
-document.title = 'collatz'
 document.body.innerHTML = `
-<style>
-body {
-  margin: 0;
-  overflow: hidden;
-  font-size: 1em;
-}
-canvas {
-  width: 100%;
-  height: 100vh;
-  background-color: papayawhip;
-}
-</style>
 <canvas>
+  Canvas is not supported
+</canvas>
 `
 let paused = true
 let canvas = document.querySelector('canvas') as HTMLCanvasElement

@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start:node": "ts-node src/main.ts",
-    "start:web": "parcel src/web.html",
+    "start:web": "parcel serve src/web.html --open",
+    "dev": "parcel serve src/web.html",
     "build": "parcel build src/web.html -o dist/index.html",
     "preupload": "npm run build",
     "upload": "surge dist https://collatz.surge.sh"
